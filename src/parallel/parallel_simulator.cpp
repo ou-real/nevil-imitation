@@ -23,7 +23,14 @@ void nevil::parallel::simulator(nevil::args &cl_args)
 
   // If the number of trials is provided
   if ((it = cl_args.find("mt")) != cl_args.end())
+  {
     num_trials = std::stoi(it->second);
+    if (num_trials < 1)
+    {
+      printf("'%d' is not a valid number of trials.\nTerminating...\n", num_trials);
+      exit(-1);
+    }
+  }
 
   // Don't spawn more threads than number of trials
   num_threads = std::min(num_threads, num_trials);
