@@ -18,24 +18,22 @@ namespace nevil
   {
   public:
     trial_controller();
-    trial_controller(int id, unsigned seed, args&);
-    ~trial_controller();
+    trial_controller(int id, unsigned seed, const nevil::args &cl_args);
 
     bool run();
-    Enki::World *get_trial_world();
+    Enki::World *get_world() const;
 
   protected:
     void _simulate();
     void _evaluate();
     void _end();
 
-    nevil::test_trial *_trial;
+    nevil::test_trial _trial;
     nevil::logger _trial_logger;
     nevil::json_logger _trial_json_logger;
     Json::Value _root;
     Json::Value _generational_data;
     int _trial_id;
-
     //simulation variables
     int _max_step_num;
     int _population_size;

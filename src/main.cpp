@@ -21,33 +21,32 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   args cl_args = parser::parse_cl_args(argc, argv);
   set_output_path(cl_args);
-  nevil::gui_simulator simulator(cl_args);
-
+  gui_simulator simulator(cl_args);
   return app.exec();
 }
 
 #else
 
-#include "nevil/parallel/parallel_simulator.hpp"
+#include "nevil/parallel/thread_simulator.hpp"
 
 /**
-* Main for parallel simulator
+* Main for thread simulator
 */
 int main(int argc, char *argv[])
-{
+{ 
   using namespace nevil;
-  
+
   srand(time(NULL));
   std::chrono::time_point<std::chrono::system_clock> start, end;
   start = std::chrono::system_clock::now();
 
   args cl_args = parser::parse_cl_args(argc, argv);
   set_output_path(cl_args);
-  parallel::simulator(cl_args);
+  parallel::thread::simulator(cl_args);
 
   end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_time = end - start;
-  std::cout << "elapsed time: " << elapsed_time.count() / 60.0 << std::endl;
+  std::cout << "Elapsed time: " << elapsed_time.count() / 60.0 << std::endl;
   return 0;
 }
 
@@ -70,6 +69,8 @@ void set_output_path(nevil::args &cl_args)
 
   os::create_directory(cl_args["output"]);
   
+  // If there is an path for experiment results use that
+  // Else use date and time for folder name
   if ((it = cl_args.find("xp_path")) != cl_args.end())
     cl_args["xp_path"] =os::append_path(cl_args["output"], it->second);
   else

@@ -2,7 +2,7 @@
 
 nevil::trial_controller::trial_controller() {}
 
-nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl_args)
+nevil::trial_controller::trial_controller(int id, unsigned seed, const nevil::args &cl_args)
   : _trial_id(id)
 {
   srand(seed);
@@ -12,27 +12,28 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl
   _max_generation_num = 200;
   _max_step_num = 1000;
   std::string trial_name = "TestTrial";
-  float mutation_rate = 0.25;
-  float bracket_ratio = 0.1;
+  double mutation_rate = 0.25;
+  double bracket_ratio = 0.1;
 
   // Reading the command line arguments
   nevil::args::const_iterator it;
+  nevil::args local_args(cl_args);
 
-  if ((it = cl_args.find("xn")) != cl_args.end())
+  if ((it = local_args.find("xn")) != local_args.end())
     trial_name = it->second;
 
-  if ((it = cl_args.find("mg")) != cl_args.end())
+  if ((it = local_args.find("mg")) != local_args.end())
     _max_generation_num = stoi(it->second);
 
-  if ((it = cl_args.find("ms")) != cl_args.end())
+  if ((it = local_args.find("ms")) != local_args.end())
     _max_step_num = stoi(it->second);
 
-  if ((it = cl_args.find("ps")) != cl_args.end())
+  if ((it = local_args.find("ps")) != local_args.end())
     _population_size = stoi(it->second);
   else
-    cl_args["ps"] = std::to_string(_population_size);
+    local_args["ps"] = std::to_string(_population_size);
 
-  if ((it = cl_args.find("br")) != cl_args.end())
+  if ((it = local_args.find("br")) != local_args.end())
   {
     bracket_ratio = stof(it->second);
     if (bracket_ratio < 0 || bracket_ratio > 1)
@@ -42,9 +43,9 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl
     }
   }
   else
-    cl_args["br"] = std::to_string(bracket_ratio);
+    local_args["br"] = std::to_string(bracket_ratio);
 
-  if ((it = cl_args.find("mr")) != cl_args.end())
+  if ((it = local_args.find("mr")) != local_args.end())
   {
     mutation_rate = stof(it->second);
     if (mutation_rate < 0 || mutation_rate > 1)
@@ -54,13 +55,13 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl
     }
   }
   else
-    cl_args["mr"] = std::to_string(mutation_rate);
+    local_args["mr"] = std::to_string(mutation_rate);
 
   // Creating a log file
   // Logging into a text file example
-  _trial_logger.start_new_file(cl_args["xp_path"], "Trial_" + std::to_string(_trial_id) + ".txt");
+  _trial_logger.start_new_file(local_args["xp_path"], "Trial_" + std::to_string(_trial_id) + ".txt");
   // Logging json example
-  _trial_json_logger.start_new_file(cl_args["xp_path"], "Trial_" + std::to_string(_trial_id) + ".json");
+  _trial_json_logger.start_new_file(local_args["xp_path"], "Trial_" + std::to_string(_trial_id) + ".json");
   _generational_data = Json::Value(Json::arrayValue);
 
   // Output arguments to file
@@ -87,7 +88,7 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl
 
   // Instantiating a controller
   // If you have more than one controller you can use the controller name to instantiate the right one
-  _trial = new nevil::test_trial(cl_args);
+  _trial = nevil::test_trial(local_args);
 
   _current_generation = 0;
   _current_individual = 0;
@@ -96,14 +97,9 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, nevil::args &cl
   printf("-Trial %d: running generation %d\n", _trial_id, _current_generation);
 }
 
-nevil::trial_controller::~trial_controller() 
+Enki::World *nevil::trial_controller::get_world() const
 {
-  delete _trial;
-}
-
-Enki::World *nevil::trial_controller::get_trial_world()
-{
-  return _trial->get_trial_world();
+  return _trial.get_world();
 }
 
 bool nevil::trial_controller::run()
@@ -113,11 +109,11 @@ bool nevil::trial_controller::run()
     if (_current_individual < _population_size)
     {
       if (_current_step == 0 && _current_individual != _population_size)
-        _trial->reset();
+        _trial.reset();
 
       if (_current_step < _max_step_num)
       {
-        _trial->update();
+        _trial.update();
         ++_current_step;
       }
       else
@@ -144,14 +140,14 @@ bool nevil::trial_controller::run()
 
 void nevil::trial_controller::_evaluate()
 {
-  _trial->epoch();
+  _trial.epoch();
   // Text logging
-  _trial_logger << _current_generation << "\t" << _trial->get_best_individual().get_fitness() << std::endl;
+  _trial_logger << _current_generation << "\t" << _trial.get_best_individual().get_fitness() << std::endl;
 
   //JSON logging
   Json::Value data;
   data["generationNumber"] = _current_generation;
-  data["maxFitness"] = _trial->get_best_individual().get_fitness();
+  data["maxFitness"] = _trial.get_best_individual().get_fitness();
   _generational_data.append(data);
 }
 
@@ -160,12 +156,12 @@ void nevil::trial_controller::_end()
   printf("-Trial %d: finished\n", _trial_id);
   //Text logging
   _trial_logger << "==Trial Ended==" << std::endl;
-  _trial_logger << "Best chromosome " << _trial->get_best_individual().get_chromosome() << std::endl;
+  _trial_logger << "Best chromosome " << _trial.get_best_individual().get_chromosome() << std::endl;
   _trial_logger.close_file();
 
   //JSON logging
   Json::Value best_chromosome (Json::arrayValue);
-  auto best_chromosome_vec = _trial->get_best_individual().get_chromosome();
+  auto best_chromosome_vec = _trial.get_best_individual().get_chromosome();
   for (int i = 0; i < best_chromosome_vec.size(); ++i)
     best_chromosome.append(best_chromosome_vec[i]);
 

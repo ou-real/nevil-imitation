@@ -2,43 +2,36 @@
 
 nevil::test_trial::test_trial() {}
 
-nevil::test_trial::test_trial(nevil::args &cl_args)
+nevil::test_trial::test_trial(const nevil::args &cl_args)
 {
   const int WORLD_SIZE_X = 40;
   const int WORLD_SIZE_Y = 50;
 
-  _population_size = std::stoi(cl_args["ps"]);
-  float bracket_ratio = std::stof(cl_args["br"]);
-  float mutation_rate = std::stof(cl_args["mr"]);
+  nevil::args local_args(cl_args);
+  _population_size = std::stoi(local_args["ps"]);
+  double bracket_ratio = std::stod(local_args["br"]);
+  double mutation_rate = std::stod(local_args["mr"]);
 
-  _trial_arena = new nevil::test_arena(WORLD_SIZE_X, WORLD_SIZE_Y);
+  _arena = nevil::test_arena(WORLD_SIZE_X, WORLD_SIZE_Y);
   _population = nevil::test_population(_population_size, bracket_ratio, mutation_rate);
   _current_index = 0;
 }
 
-nevil::test_trial::~test_trial() 
+Enki::World *nevil::test_trial::get_world() const
 {
-  delete _trial_arena;
-}
-
-Enki::World *nevil::test_trial::get_trial_world()
-{
-  return _trial_arena->get_world();
+  return _arena.get_world();
 }
 
 bool nevil::test_trial::update()
 {
-  _trial_arena->tick();
-  _trial_arena->update();
-  return true;
+  return _arena.update();
 }
 
 bool nevil::test_trial::reset()
 {
-  _trial_arena->reset();
-  _trial_arena->set_individuals(_population[_current_index]);
+  _arena.set_individuals(_population[_current_index]);
   ++_current_index;
-  return true;
+  return _arena.reset();
 }
 
 bool nevil::test_trial::epoch()

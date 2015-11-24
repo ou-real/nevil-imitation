@@ -30,6 +30,7 @@ namespace nevil
     * @return std::string resulting path
     */
     std::string append_path(const std::string &path1, const std::string &path2);
+
     /**
     * Creates a directory if it doesn't exists.
     * @param std::string directory path
@@ -37,18 +38,21 @@ namespace nevil
     * The status code would be zero if directory exits.
     */
     bool create_directory(const std::string &path);
+
     /**
     * Constructs a directory nevil based on the current time.
     * @param
     * @return std::string directory nevil
     */
     std::string get_time_name_dir();
+
     /**
     * Returns the current working directory of the binary file.
     * @param
     * @return std::string path to the current working directory
     */
     std::string get_working_dir();
+    
     /**
     * Returns the number of processors online.
     * @param
@@ -59,4 +63,3 @@ namespace nevil
 }
 
 #endif // _NEVIL_UTIL_SYSTEM_HPP_
-

@@ -13,20 +13,18 @@ namespace nevil
   {
   public:
     test_trial();
-    test_trial(nevil::args &cl_args);
-    virtual ~test_trial();
+    test_trial(const nevil::args &cl_args);
     
     bool reset();
     bool update();
     bool epoch();
     nevil::test_individual get_best_individual() const;
-    Enki::World *get_trial_world();
-
+    Enki::World *get_world() const;
 
   protected:
-    int _population_size;
-    int _current_index;
-    nevil::test_arena *_trial_arena;
+    size_t _population_size;
+    size_t _current_index;
+    nevil::test_arena _arena;
     nevil::test_individual _best_individual;
     nevil::test_population _population;
   };

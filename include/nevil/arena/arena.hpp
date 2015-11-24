@@ -1,6 +1,7 @@
 #ifndef _NEVIL_ARENA_ARENA_HPP_
 #define _NEVIL_ARENA_ARENA_HPP_
 
+#include <vector>
 #include "nevil/arena/object.hpp"
 #include "nevil/arena/robot.hpp"
 
@@ -8,24 +9,27 @@ namespace nevil
 {
   class arena
   {
-  public:
+   public:
     arena();
-    arena(int size_x, int size_y, const Enki::Color &arena_color);
-    virtual ~arena(); 
+    arena(int size_x, int size_y, const Enki::Color &color = Enki::Color(0.9, 0.9, 0.9));
+    arena(const nevil::arena &rhs);
+    arena(nevil::arena &&rhs) noexcept;
+    virtual ~arena();
 
-    void tick();
-    virtual bool update() = 0;
-    virtual void reset();
+    virtual bool update();
+    virtual bool reset();
 
-    Enki::World* get_world();
+    Enki::World* get_world() const;
+    nevil::arena &operator=(const nevil::arena &rhs);
+    nevil::arena &operator=(nevil::arena &&rhs) noexcept;
 
-  protected:
+   protected:
     void _add_object(nevil::object *o);
     void _add_robot(nevil::robot *r);
 
-    Enki::World *_trial_world;
+    std::unique_ptr<Enki::World> _world;
     std::vector<robot*> _robot_vector;
     std::vector<object*> _object_vector;
   };
 }
-#endif // _NEVIL_ARENA_ARENA_HPP_
+#endif  // _NEVIL_ARENA_ARENA_HPP_

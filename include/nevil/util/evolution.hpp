@@ -2,7 +2,6 @@
 #define _NEVIL_UTIL_EVOLUTION_HPP_
 
 #include <vector>
-#include <iostream>
 
 namespace nevil
 {
@@ -22,7 +21,7 @@ namespace nevil
       {
         bracket.clear();
         int winner_index = 0;
-        float winner_fitness = 0;
+        double winner_fitness = 0;
 
         // Creates the bracket
         for (int j = 0; j < pool_size; ++j) 

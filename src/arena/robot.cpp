@@ -1,23 +1,45 @@
 #include "nevil/arena/robot.hpp"
 
 nevil::robot::robot()
-  : Enki::EPuck(EPuck::CAPABILITY_CAMERA) {}
+  : Enki::EPuck(EPuck::CAPABILITY_CAMERA) 
+  {}
 
-nevil::robot::robot(double x, double y, double angle ,const std::string &robot_name, const Enki::Color &color, double max_speed)
+nevil::robot::robot(double x, double y, double angle
+    , const std::string &name, const Enki::Color &color, size_t input_num, double max_speed)
   : Enki::EPuck(EPuck::CAPABILITY_CAMERA)
   , _initial_angle(angle * M_PI)
   , _initial_position(Enki::Point(x, y))
+  , _robot_name(name)
+  , _input_num(input_num)
   , _max_speed(max_speed)
-  , _robot_name(robot_name)
 {
-  if (max_speed > 12.8)
-    std::cout << "Warning the max speed of Epuck is 12.8." << std::endl;
-
+  assert((max_speed <= 12.8) && "Warning the max speed of Epuck is 12.8.");
+  assert((input_num >= 18) && "The minimum number of inputs should be 18");
   setColor(color);
   reset_position();
 }
 
-nevil::robot::~robot() {}
+nevil::robot::robot(const nevil::robot &rhs)
+  : Enki::EPuck(EPuck::CAPABILITY_CAMERA)
+  , _initial_angle(rhs._initial_angle)
+  , _initial_position(rhs._initial_position)
+  , _robot_name(rhs._robot_name)
+  , _input_num(rhs._input_num)
+  , _max_speed(rhs._max_speed)
+{
+  reset_position();
+}
+
+nevil::robot::robot(nevil::robot &&rhs) noexcept
+  : Enki::EPuck(EPuck::CAPABILITY_CAMERA)
+  , _initial_angle(rhs._initial_angle)
+  , _initial_position(rhs._initial_position)
+  , _robot_name(std::move(rhs._robot_name))
+  , _input_num(rhs._input_num)
+  , _max_speed(rhs._max_speed)
+{
+  reset_position();
+}
 
 void nevil::robot::reset_position()
 {
@@ -35,10 +57,10 @@ Color sets for switch and light
 0.4 | 0.0 | 1.0 switch turned off
 0.9 | 0.5 | 1.0 switch turned On  
 */
-const std::vector<double> nevil::robot::_get_sensor_inputs()
+std::vector<double> nevil::robot::_get_camera_inputs()
 {
-  //reset the counters
-  std::vector<double> sensor_counter(SENSOR_NUM, 0);
+  // Reset the counters
+  std::vector<double> sensor_counter(_input_num, 0);
 
   // Each color has 6 groups of pixels
   for (size_t i = 0; i < 6; ++i)
@@ -47,20 +69,20 @@ const std::vector<double> nevil::robot::_get_sensor_inputs()
     for (size_t j = 0; j < 10; ++j)
     {
       double red_value = camera.image[i * 10 + j].r();
-      // switch
+      // Switch
       if (red_value == 0.4)
         ++sensor_counter[i];
-      // light off
+      // Light off
       if (red_value == 0.5)
         ++sensor_counter[i + 6];
-      // light on
+      // Light on
       if (red_value == 1.0)
         ++sensor_counter[i + 12];
     }
   }
 
-  // adjust the sensor information
-  for (size_t i = 0; i < SENSOR_NUM; ++i)
+  // Adjust the sensor information
+  for (size_t i = 0; i < _input_num; ++i)
     sensor_counter[i] = sensor_counter[i] > 7;
 
   return sensor_counter;
@@ -103,4 +125,26 @@ bool nevil::robot::is_at_light() const
       return false;
 
   return true;
+}
+
+nevil::robot &nevil::robot::operator=(const nevil::robot &rhs)
+{
+  _initial_angle = rhs._initial_angle;
+  _initial_position = rhs._initial_position;
+  _robot_name = rhs._robot_name;
+  _input_num = rhs._input_num;
+  _max_speed = rhs._max_speed;
+  reset_position();
+  return *this;
+}
+
+nevil::robot &nevil::robot::operator=(nevil::robot &&rhs) noexcept
+{
+  _initial_angle = rhs._initial_angle;
+  _initial_position = std::move(rhs._initial_position);
+  _robot_name = std::move(rhs._robot_name);
+  _input_num = rhs._input_num;
+  _max_speed = rhs._max_speed;
+  reset_position();
+  return *this;
 }

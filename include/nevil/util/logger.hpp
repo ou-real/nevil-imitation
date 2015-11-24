@@ -13,7 +13,6 @@ namespace nevil
   {
   public:
     inline logger() {};
-    inline virtual ~logger() {};
 
     inline void start_new_file(const std::string &path, const std::string &file_name)
     {
@@ -77,4 +76,5 @@ namespace nevil
       std::ofstream _output_file;
   };
 }
+
 #endif // NEVIL_UTIL_LOGGER_HPP_

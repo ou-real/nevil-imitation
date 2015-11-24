@@ -14,7 +14,6 @@ namespace nevil
   {
   public:
     inline json_logger() {};
-    inline virtual ~json_logger() {};
 
     inline void start_new_file(const std::string &path, const std::string &file_name)
     {
@@ -51,4 +50,5 @@ namespace nevil
       std::ofstream _output_file;
   };
 }
+
 #endif // NEVIL_UTIL_JSON_LOGGER_HPP_

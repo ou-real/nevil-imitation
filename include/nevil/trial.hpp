@@ -12,7 +12,7 @@ namespace nevil
     virtual bool reset() = 0;
     virtual bool update() = 0;
     virtual bool epoch() = 0;
-    virtual inline Enki::World *get_trial_world() = 0;
+    virtual inline Enki::World *get_world() const = 0;
   };
 }
 

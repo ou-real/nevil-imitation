@@ -9,6 +9,9 @@ namespace nevil
 {
   namespace random
   {
+    /**
+    * Returns an integer in range [lower_bound, upper_bound] (inclusive)
+    */
     int random_int(int lower_bound, int upper_bound);
   }
 }

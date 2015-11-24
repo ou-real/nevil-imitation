@@ -13,14 +13,10 @@ namespace nevil
     test_individual();
     test_individual(size_t chromo_size);
     test_individual(const std::vector<double> &chromosome);
-    test_individual(const test_individual &rhs);
-    virtual ~test_individual();
 
-    void increase_fitness(int fitness);
+    void increase_fitness(double fitness);
     test_individual* clone() const;
-    void mutate(float rate);
-    
-    nevil::test_individual &operator=(const nevil::test_individual &rhs);
+    void mutate(double rate);
   };
 }
 

@@ -10,7 +10,7 @@
 
 namespace nevil
 {
-  typedef std::unordered_map<std::string,std::string> args;
+  typedef std::unordered_map<std::string, std::string> args;
 
   namespace parser
   {

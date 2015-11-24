@@ -9,14 +9,18 @@ namespace nevil
 {
   class gui_simulator
   {
-  public:
-    gui_simulator(nevil::args &cl_args);
-    ~gui_simulator();
+   public:
+    gui_simulator();
+    explicit gui_simulator(const nevil::args &cl_args);
+    gui_simulator(const nevil::gui_simulator &rhs) = delete;
+    gui_simulator(nevil::gui_simulator &&rhs) noexcept = delete;
 
-  private:
-    nevil::trial_controller *_controller;
-    nevil::view *_view;
+    nevil::gui_simulator &operator=(const nevil::gui_simulator &rhs) = delete;
+    nevil::gui_simulator &operator=(nevil::gui_simulator &&rhs) noexcept = delete;
+   private:
+    nevil::trial_controller _controller;
+    std::unique_ptr<nevil::view> _view;
   };
 }
 
-#endif //_NAME_GUI_SIMULATOR_HPP_
+#endif  // _NAME_GUI_SIMULATOR_HPP_
