@@ -5,28 +5,24 @@ compiler:
   - gcc
   - clang
 
-before_install:
-  # g++4.8.1
-  - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
-
-  # clang 3.4
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
-
-  - sudo apt-get update -qq
-
 install:
-  # g++4.8.1
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 
-  # clang 3.4
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
-  - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libyajl-dev
+    - libxml2-dev
+    - gcc-4.8
+    - g++-4.8
+    - clang
 
 script:
   - cmake CMakeLists.txt -DGUI=OFF -DDEBUG=ON -DO=OFF
   - make
-  - ./build/nevil -tn 1 -ps 20 -mg 5 -xn TestTrial
+  - ./build/nevil -tn 1 -ps 20 -mg 2 -xn TestTrial
   - ./build/nevil -mt 10 -ps 20 -mg 2 -xn TestTrial
 
   - cmake CMakeLists.txt -DGUI=OFF -DDEBUG=OFF -DO=ON
