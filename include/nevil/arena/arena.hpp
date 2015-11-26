@@ -1,6 +1,7 @@
 #ifndef _NEVIL_ARENA_ARENA_HPP_
 #define _NEVIL_ARENA_ARENA_HPP_
 
+#include <memory>
 #include <vector>
 #include "nevil/arena/object.hpp"
 #include "nevil/arena/robot.hpp"

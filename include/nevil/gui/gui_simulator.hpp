@@ -1,6 +1,7 @@
 #ifndef _NAME_GUI_SIMULATOR_HPP_
 #define _NAME_GUI_SIMULATOR_HPP_
 
+#include <memory>
 #include "nevil/util/parser.hpp"
 #include "nevil/gui/view.hpp"
 #include "nevil/trial_controller.hpp"
