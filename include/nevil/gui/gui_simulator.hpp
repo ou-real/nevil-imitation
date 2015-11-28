@@ -1,8 +1,9 @@
-#ifndef _NAME_GUI_SIMULATOR_HPP_
-#define _NAME_GUI_SIMULATOR_HPP_
+#ifndef _NEVIL_GUI_SIMULATOR_HPP_
+#define _NEVIL_GUI_SIMULATOR_HPP_
 
 #include <memory>
 #include "nevil/util/parser.hpp"
+#include "nevil/util/random.hpp"
 #include "nevil/gui/view.hpp"
 #include "nevil/trial_controller.hpp"
 
@@ -24,4 +25,4 @@ namespace nevil
   };
 }
 
-#endif  // _NAME_GUI_SIMULATOR_HPP_
+#endif  // _NEVIL_GUI_SIMULATOR_HPP_

@@ -1,11 +1,10 @@
 #ifndef NEVIL_UTIL_JSON_LOGGER_HPP_
 #define NEVIL_UTIL_JSON_LOGGER_HPP_
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-
 #include <json/json.h>
-
 #include "nevil/util/system.hpp"
 
 namespace nevil
@@ -26,7 +25,7 @@ namespace nevil
       if (!_output_file)
       {
         std::cerr << "Failed to open the file \"" << file_path << "\"\nAborting now..." << std::endl;
-        exit(-1);
+        std::abort();
       }
     }
 

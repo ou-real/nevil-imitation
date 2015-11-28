@@ -1,10 +1,11 @@
 #ifndef _NEVIL_UTIL_PARSER_HPP_
 #define _NEVIL_UTIL_PARSER_HPP_
 
-#include <string>
-#include <unordered_map>
-#include <iostream>
+#include <cstdlib>
 #include <fstream>
+#include <string>
+#include <iostream>
+#include <unordered_map>
 #include <json/json.h>
 #include "print.hpp"
 

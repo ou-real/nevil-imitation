@@ -26,9 +26,9 @@ namespace nevil
 
    protected:
     nevil::trial_controller *_controller;
-    bool _pause_gui;
     int _frame_number;
     int _skip_frame;
+    bool _pause_gui;
   };
 }
 

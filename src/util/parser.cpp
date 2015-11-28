@@ -8,7 +8,7 @@ nevil::args nevil::parser::read_json(char* path)
   if(!file.is_open())
   {
     std::cerr << "Failed to open \""<< path << "\"" << std::endl;
-    exit(1);
+    std::abort();
   }
 
   nevil::args cl_args;
@@ -17,7 +17,7 @@ nevil::args nevil::parser::read_json(char* path)
   if(!reader.parse(file, root, false))
   {
     std::cerr << reader.getFormatedErrorMessages() << std::endl;
-    exit(-1);
+    std::abort();
   }
   file.close();
 
@@ -29,7 +29,7 @@ nevil::args nevil::parser::read_json(char* path)
 nevil::args nevil::parser::read_cl(int argc, char *argv[])
 {
   nevil::args cl_args;
-  for (int i = 1; i < argc; ++i)
+  for (std::size_t i = 1; i < argc; ++i)
   {
     if (argv[i][0] == '-')
     {
@@ -54,6 +54,6 @@ nevil::args nevil::parser::parse_cl_args(int argc, char *argv[])
     else
       cl_args = read_cl(argc, argv);
 
-    std::cout << "Arguments read: \n" << cl_args;
+    std::cout << "Arguments read:" << std::endl << cl_args;
     return cl_args;
 }

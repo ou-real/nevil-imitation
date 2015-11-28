@@ -30,7 +30,7 @@ void nevil::view::timerEvent(QTimerEvent *event)
   if (_frame_number == _skip_frame)
   {
     updateGL();
-    _frame_number = -1;
+    _frame_number = 0;
   }
   ++_frame_number;
 }

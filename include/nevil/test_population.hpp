@@ -22,9 +22,9 @@ namespace nevil
     test_individual *operator[](int i);
 
   protected:
+    size_t _population_size;
     size_t _bracket_size;
     float _mutation_rate;
-    size_t _population_size;
     std::vector <nevil::test_individual *> _individual_list;
   };
 }

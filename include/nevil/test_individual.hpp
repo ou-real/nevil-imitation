@@ -1,5 +1,5 @@
-#ifndef _NAME_TEST_INDIVIDUAL_HPP_
-#define _NAME_TEST_INDIVIDUAL_HPP_
+#ifndef _NEVIL_TEST_INDIVIDUAL_HPP_
+#define _NEVIL_TEST_INDIVIDUAL_HPP_
 
 #include <string>
 #include "individual.hpp"
@@ -10,14 +10,15 @@ namespace nevil
   class test_individual : public individual
   {
   public:
+    // Constructors
     test_individual();
     test_individual(size_t chromo_size);
     test_individual(const std::vector<double> &chromosome);
 
-    void increase_fitness(double fitness);
-    test_individual* clone() const;
+    // Mandatory virtual functions
+    nevil::test_individual* clone() const;
     void mutate(double rate);
   };
 }
 
-#endif // _NAME_TEST_INDIVIDUAL_HPP_
+#endif // _NEVIL_TEST_INDIVIDUAL_HPP_

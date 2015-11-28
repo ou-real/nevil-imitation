@@ -34,12 +34,12 @@ namespace nevil
    protected:
     void _set_wheels_speed(double left, double right);
     double _clamp(double val, double min, double max);
-
     virtual std::vector<double> _get_camera_inputs();
-    std::string _robot_name;
-    Enki::Point _initial_position;
-    size_t _input_num;
+
     double _initial_angle;
+    Enki::Point _initial_position;
+    std::string _robot_name;
+    size_t _input_num;
     double _max_speed;
   };
 }

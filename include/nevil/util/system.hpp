@@ -3,7 +3,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>
+#include <cstdlib>
 #include <iostream>
 #include <chrono>
 #include <string>

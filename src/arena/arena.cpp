@@ -81,6 +81,7 @@ nevil::arena &nevil::arena::operator=(const nevil::arena &rhs)
 
 nevil::arena &nevil::arena::operator=(nevil::arena &&rhs) noexcept
 {
+  std::cout << "move arena" << std::endl;
   std::swap(_world, rhs._world);
   _robot_vector = std::move(rhs._robot_vector);
   _object_vector = std::move(rhs._object_vector);

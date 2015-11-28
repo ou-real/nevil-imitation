@@ -33,7 +33,7 @@ nevil::robot::robot(const nevil::robot &rhs)
 nevil::robot::robot(nevil::robot &&rhs) noexcept
   : Enki::EPuck(EPuck::CAPABILITY_CAMERA)
   , _initial_angle(rhs._initial_angle)
-  , _initial_position(rhs._initial_position)
+  , _initial_position(std::move(rhs._initial_position))
   , _robot_name(std::move(rhs._robot_name))
   , _input_num(rhs._input_num)
   , _max_speed(rhs._max_speed)

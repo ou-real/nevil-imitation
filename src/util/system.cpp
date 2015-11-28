@@ -61,7 +61,7 @@ std::string nevil::os::get_working_dir()
   if (!get_current_dir(current_path, FILENAME_MAX))
   {
     std::cerr << "Could not get the working directory" << std::endl;
-    exit(-1);
+    std::abort();
   }
   return std::string(current_path);
 }

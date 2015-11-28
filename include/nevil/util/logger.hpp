@@ -1,9 +1,9 @@
 #ifndef NEVIL_UTIL_LOGGER_HPP_
 #define NEVIL_UTIL_LOGGER_HPP_
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
-
 #include "nevil/util/print.hpp"
 #include "nevil/util/system.hpp"
 
@@ -25,7 +25,7 @@ namespace nevil
       if (!_output_file)
       {
         std::cerr << "Failed to open the file \"" << file_path << "\"\nAborting now..." << std::endl;
-        exit(-1);
+        std::abort();
       }
     }
 

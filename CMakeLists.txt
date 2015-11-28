@@ -13,11 +13,10 @@ endif(DEBUG)
 
 if(O)
   MESSAGE("Enabling Optimization")
-  add_definitions(-O3)
-  add_definitions(-DNDEBUG)
+  add_definitions(-O3 -DNDEBUG)
 endif(O)
 
-add_definitions(-std=c++0x)
+add_definitions(-std=c++11 -Wall)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
@@ -47,7 +46,7 @@ if (GUI)
   endif (QT4_FOUND)
 else(GUI)
   message("Building command line mode")
-  find_package (Threads REQUIRED)
+  #find_package (Threads REQUIRED)
   file(GLOB PARALLEL_SOURCES "${CMAKE_SOURCE_DIR}/src/parallel/*")
   add_executable(${CMAKE_PROJECT_NAME} ${SOURCES} ${PARALLEL_SOURCES} ${ARENA_SOURCES} ${CONTROLLER_SOURCES} ${UTIL_SOURCES} ${JSON})
   target_link_libraries(${CMAKE_PROJECT_NAME} enki ${CMAKE_THREAD_LIBS_INIT})
