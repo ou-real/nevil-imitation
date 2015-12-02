@@ -16,35 +16,35 @@ nevil::arena::arena(const nevil::arena &rhs)
 {
   _world.reset(new Enki::World(rhs._world->w, rhs._world->h, rhs._world->wallsColor));
   _world->takeObjectOwnership(false);
-  for (auto r : rhs._robot_vector)
+  for (auto r : rhs._robots)
     _add_robot(r->clone());
 
-  for (auto o : rhs._object_vector)
-    _add_object(o->clone());
+  for (auto o : rhs._objects)
+    _add_object(o.first, o.second->clone());
 }
 
 nevil::arena::arena(nevil::arena &&rhs) noexcept
   : _world(std::move(rhs._world))
-  , _robot_vector(std::move(rhs._robot_vector))
-  , _object_vector(std::move(rhs._object_vector))
+  , _robots(std::move(rhs._robots))
+  , _objects(std::move(rhs._objects))
 {}
 
 nevil::arena::~arena()
 {
-  for (auto r : _robot_vector)
+  for (auto r : _robots)
     delete r;
 
-  for (auto o : _object_vector)
-    delete o;
+  for (auto o : _objects)
+    delete o.second;
 }
 
 bool nevil::arena::reset()
 {
-  for (auto r : _robot_vector)
+  for (auto r : _robots)
     r->reset_position();
 
-  for (auto o : _object_vector)
-    o->turn_off();
+  for (auto o : _objects)
+    o.second->turn_off();
   return true;
 }
 
@@ -62,13 +62,13 @@ bool nevil::arena::update()
 
 void nevil::arena::_add_robot(nevil::robot *r)
 {
-  _robot_vector.push_back(r);
+  _robots.push_back(r);
   _world->addObject(r);
 }
 
-void nevil::arena::_add_object(nevil::object *o)
+void nevil::arena::_add_object(const std::string &name, nevil::object *o)
 {
-  _object_vector.push_back(o);
+  _objects[name] = o;
   _world->addObject(o);
 }
 
@@ -81,9 +81,8 @@ nevil::arena &nevil::arena::operator=(const nevil::arena &rhs)
 
 nevil::arena &nevil::arena::operator=(nevil::arena &&rhs) noexcept
 {
-  std::cout << "move arena" << std::endl;
   std::swap(_world, rhs._world);
-  _robot_vector = std::move(rhs._robot_vector);
-  _object_vector = std::move(rhs._object_vector);
+  _robots = std::move(rhs._robots);
+  _objects = std::move(rhs._objects);
   return *this;
 }

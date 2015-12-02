@@ -18,8 +18,7 @@ addons:
     - clang
 
 script:
-  - clang++ --version
-  - g++ --version
+  - $CXX --version
   - cmake CMakeLists.txt -DGUI=OFF -DDEBUG=ON -DO=OFF
   - make
   - ./build/nevil -tn 1 -ps 20 -mg 2 -xn TestTrial
@@ -27,6 +26,8 @@ script:
 
   - cmake CMakeLists.txt -DGUI=OFF -DDEBUG=OFF -DO=ON
   - make
+  - ./build/nevil -tn 1 -ps 20 -mg 2 -xn TestTrial
+  - ./build/nevil -mt 10 -ps 20 -mg 2 -xn TestTrial
 
   - cmake CMakeLists.txt -DGUI=ON -DDEBUG=ON -DO=OFF
   - make

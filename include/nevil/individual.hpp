@@ -2,9 +2,12 @@
 #define _NEVIL_INDIVIDUAL_HPP_
 
 #include <vector>
+#include "nevil/util/random.hpp"
 
 namespace nevil
 {
+  typedef std::vector<double> chromosome;
+
   class individual
   {
   public:
@@ -17,14 +20,14 @@ namespace nevil
     virtual void increase_fitness(double fitness);
     virtual void decrease_fitness(double fitness);
     virtual void set_fitness(double fitness);
+    virtual void mutate(double rate);
 
     // Mandatory virtual functions
-    virtual void mutate(double rate) = 0;
     virtual nevil::individual* clone() const = 0;
     
     // Getters
     double get_fitness() const;
-    const std::vector<double> &get_chromosome() const;
+    const nevil::chromosome &get_chromosome() const;
 
     // Comparators (equality for individual really doesn't make sense. Equal genes??)
     bool operator>(const individual &rhs) const;
@@ -32,7 +35,7 @@ namespace nevil
 
   protected:
     double _fitness;
-    std::vector<double> _chromosome;
+    nevil::chromosome _chromosome;
   };
 }
 

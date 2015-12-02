@@ -4,7 +4,7 @@ nevil::test_individual::test_individual()
   : nevil::individual()
 {}
 
-nevil::test_individual::test_individual(size_t chromo_size)
+nevil::test_individual::test_individual(std::size_t chromo_size)
   : nevil::individual(chromo_size)
 {
   // Assign values to every gene in the chromosome
@@ -12,23 +12,13 @@ nevil::test_individual::test_individual(size_t chromo_size)
     _chromosome[i] = nevil::random::random_int(-15, 15);
 }
 
-nevil::test_individual::test_individual(const std::vector<double> &chromosome)
+nevil::test_individual::test_individual(const nevil::chromosome &chromo)
   : nevil::individual()
 {
-  _chromosome = chromosome;
+  _chromosome = chromo;
 }
 
 nevil::test_individual *nevil::test_individual::clone() const
 {
   return new test_individual(_chromosome);
-}
- 
-void nevil::test_individual::mutate(double rate)
-{
-  assert ((0 <= rate && rate <= 1) && "Mutation rate must be between 0 and 1");
-  if (nevil::random::random_double() <= rate)
-  {
-    int gene_index = nevil::random::random_int() % (_chromosome.size());
-    _chromosome[gene_index] = nevil::random::random_int(-15, 15);
-  }
 }

@@ -9,9 +9,13 @@ namespace nevil
   {
    public:
     switch_object();
-    switch_object(int x, int y, double size_x, double size_y, double height
-      , const Enki::Color &off_color = Enki::Color(0.4, 0.0, 1.0)
-      , const Enki::Color &on_color = Enki::Color(0.9, 1.0, 1.0));
+    switch_object(int x, int y, double size_x = 6
+      , double size_y = 0.1, double height = 7
+      , const Enki::Color &off_color = DEFAULT_OFF_COLOR
+      , const Enki::Color &on_color = DEFAULT_ON_COLOR);
+
+    static const Enki::Color DEFAULT_ON_COLOR;
+    static const Enki::Color DEFAULT_OFF_COLOR;
   };
 }
 

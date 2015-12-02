@@ -1,9 +1,7 @@
 #ifndef _NEVIL_TEST_INDIVIDUAL_HPP_
 #define _NEVIL_TEST_INDIVIDUAL_HPP_
 
-#include <string>
 #include "individual.hpp"
-#include "nevil/util/random.hpp"
 
 namespace nevil
 {
@@ -12,12 +10,11 @@ namespace nevil
   public:
     // Constructors
     test_individual();
-    test_individual(size_t chromo_size);
-    test_individual(const std::vector<double> &chromosome);
+    test_individual(std::size_t chromo_size);
+    test_individual(const nevil::chromosome &chromo);
 
     // Mandatory virtual functions
     nevil::test_individual* clone() const;
-    void mutate(double rate);
   };
 }
 
