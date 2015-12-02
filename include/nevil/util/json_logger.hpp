@@ -12,17 +12,19 @@ namespace nevil
   class json_logger
   {
   public:
-    inline json_logger() {};
+    inline json_logger() {
+      _output_file = new std::ofstream();
+    };
 
     inline void start_new_file(const std::string &path, const std::string &file_name)
     {
-      if (_output_file.is_open())
-          _output_file.close();
+      if (_output_file->is_open())
+          _output_file->close();
 
       std::string file_path = os::append_path(path, file_name);
-      _output_file.open(file_path.c_str(), std::ofstream::out);
+      _output_file->open(file_path.c_str(), std::ofstream::out);
 
-      if (!_output_file)
+      if (!(*_output_file))
       {
         std::cerr << "Failed to open the file \"" << file_path << "\"\nAborting now..." << std::endl;
         std::abort();
@@ -31,22 +33,22 @@ namespace nevil
 
     inline void flush()
     {
-      _output_file.flush();
+      _output_file->flush();
     }
 
     inline void close_file()
     {
-      _output_file.close();
+      _output_file->close();
     }
 
     inline void write(const Json::Value &root)
     {
       Json::StyledStreamWriter writer;
-      writer.write(_output_file, root);
+      writer.write(*_output_file, root);
     }
 
   protected:
-      std::ofstream _output_file;
+      std::ofstream *_output_file;
   };
 }
 
