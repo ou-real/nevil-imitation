@@ -2,12 +2,11 @@
 
 nevil::individual::individual()
  : _fitness(0)
- , _chromosome(std::vector<double>())
 {}
 
 nevil::individual::individual(std::size_t chromo_size)
   : _fitness(0)
-  , _chromosome(std::vector<double>(chromo_size, 0))
+  , _chromosome(nevil::chromosome(chromo_size, 0))
 {}
 
 nevil::individual::~individual()
@@ -33,9 +32,19 @@ double nevil::individual::get_fitness() const
   return _fitness;
 }
 
-const std::vector<double> &nevil::individual::get_chromosome() const
+const nevil::chromosome &nevil::individual::get_chromosome() const
 {
   return _chromosome;
+}
+
+void nevil::individual::mutate(double rate)
+{
+  assert ((0 <= rate && rate <= 1) && "Mutation rate must be between 0 and 1");
+  if (nevil::random::random_double() <= rate)
+  {
+    int gene_index = nevil::random::random_int() % (_chromosome.size());
+    _chromosome[gene_index] = nevil::random::random_int(-15, 15);
+  }
 }
 
 bool nevil::individual::operator>(const individual &rhs) const

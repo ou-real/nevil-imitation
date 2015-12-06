@@ -3,11 +3,15 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 #include "nevil/arena/object.hpp"
 #include "nevil/arena/robot.hpp"
 
 namespace nevil
 {
+  typedef std::vector<robot*> robot_list;
+  typedef std::unordered_map<std::string, nevil::object*> object_list;
+
   class arena
   {
    public:
@@ -25,12 +29,12 @@ namespace nevil
     nevil::arena &operator=(nevil::arena &&rhs) noexcept;
 
    protected:
-    void _add_object(nevil::object *o);
+    void _add_object(const std::string &name, nevil::object *o);
     void _add_robot(nevil::robot *r);
 
     std::unique_ptr<Enki::World> _world;
-    std::vector<robot*> _robot_vector;
-    std::vector<object*> _object_vector;
+    robot_list _robots;
+    object_list _objects;
   };
 }
 #endif  // _NEVIL_ARENA_ARENA_HPP_
