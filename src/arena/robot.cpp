@@ -108,7 +108,7 @@ void nevil::robot::_set_wheels_speed(double left, double right)
 bool nevil::robot::is_at(nevil::object *obj, object_state state, nevil::color_chanel chanel) const
 {
   // If the robot is not in a 5 pixel diameter circle of the object return false
-  if (std::pow(obj->pos.x - pos.x, 2) > 25 && std::pow(obj->pos.y - pos.y, 2) > 25)
+  if (std::pow(obj->pos.x - pos.x, 2) > 25 || std::pow(obj->pos.y - pos.y, 2) > 25)
     return false;
 
   double color_val = obj->get_off_color()[chanel];
