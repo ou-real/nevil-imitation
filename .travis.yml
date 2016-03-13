@@ -31,6 +31,8 @@ script:
 
   - cmake CMakeLists.txt -DGUI=ON -DDEBUG=ON -DO=OFF
   - make
+  - ./build/nevil -ps 20 -mg 2 -xn TestTrial
 
   - cmake CMakeLists.txt -DGUI=ON -DDEBUG=OFF -DO=ON
   - make
+  - ./build/nevil -ps 20 -mg 2 -xn TestTrial
