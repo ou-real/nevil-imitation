@@ -11,7 +11,7 @@ git clone https://github.com/ou-real/nevil-base.git
 ```
 
 ### Compilation/Install
-####W indows
+#### Windows
 * Someone please write this
 
 #### Unix
