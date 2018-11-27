@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.0)
 
 project(nevil)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 option(DEBUG "Enable debugging flags" OFF)
 option(O "Enable optimization" OFF)
 option(GUI "Build with GUI tools" OFF)
