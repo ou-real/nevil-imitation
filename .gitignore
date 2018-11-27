@@ -52,3 +52,4 @@ Thumbs.db
 
 ## Visual Studio Code configuration files
 .vscode/
+compile_commands.json
