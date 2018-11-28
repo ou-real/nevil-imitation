@@ -2,6 +2,7 @@
 
 nevil::actor_observer_arena::actor_observer_arena(int size_x, int size_y, bool actor_observer_neuron, double speed_actor, double speed_observer, double angle_actor, double angle_observer, const Enki::Color &arena_color)
   : nevil::arena(size_x, size_y)
+  , _actor_observer_neuron(actor_observer_neuron)
 {
   const double OBJECT_SIZE_X = 6;
   const double OBJECT_SIZE_Y = 0.1;
@@ -42,6 +43,8 @@ nevil::actor_observer_arena::actor_observer_arena(int size_x, int size_y, bool a
     , "Observer"
     , Enki::Color(0.5, 0.0, 0.0)));
 }
+
+nevil::actor_observer_arena::~actor_observer_arena(){}
 
 void nevil::actor_observer_arena::set_individuals(nevil::actor_observer_individual *actor, nevil::actor_observer_individual *observer)
 {
