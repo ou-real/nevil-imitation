@@ -19,9 +19,6 @@ namespace nevil
     bool update(const nevil::object_list &objects);
     void set_individual(nevil::individual *i);
 
-    bool is_at_switch() const;
-    bool is_at_light() const;
-
     // nevil::actor_observer_robot &operator=(const nevil::actor_observer_robot &rhs);
     // nevil::actor_observer_robot &operator=(nevil::actor_observer_robot &&rhs) noexcept;
     

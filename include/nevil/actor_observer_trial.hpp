@@ -18,7 +18,7 @@ namespace nevil
     bool reset();
     bool update();
     bool epoch();
-    std::vector<nevil::actor_observer_individual> get_best_individual() const;
+    std::vector<nevil::actor_observer_individual> get_best_individuals() const;
     Enki::World *get_world() const;
 
   protected:

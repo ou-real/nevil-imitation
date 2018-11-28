@@ -7,10 +7,12 @@ nevil::actor_observer_population::actor_observer_population(size_t pop_size, flo
   , _bracket_size(size_t(bracket_ratio * pop_size))
   , _mutation_rate(mutation_rate)
 {
-  _individual_list = std::vector<nevil::actor_observer_individual *>(_population_size);
+  _individual_list = std::vector<nevil::actor_observer_individual *>(_population_size * 2);
   for (int i = 0; i < _population_size; ++i){
     _individual_list[i] = new nevil::actor_observer_individual(38, true);
+    _individual_list[i]->set_id(i);
     _individual_list[i + _population_size] = new nevil::actor_observer_individual(38, false);
+    _individual_list[i + _population_size]->set_id(i + _population_size);
   }
 }
 
@@ -27,10 +29,10 @@ size_t nevil::actor_observer_population::size() const
 
 std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::next_generation()
 {
+  std::cout << "Begin + pouplation_size - 1: " << (*(_individual_list.begin() + _population_size - 1))->get_uuid() << std::endl;
   std::cout << "Begin + pouplation_size: " << (*(_individual_list.begin() + _population_size))->get_uuid() << std::endl;
-  std::cout << "Begin + pouplation_size + 1: " << (*(_individual_list.begin() + _population_size + 1))->get_uuid() << std::endl;
   // Selecting (Select actors and observers only from their pool)
-  auto selected_actor_indices = nevil::evolution::tournament_selection(_individual_list.begin(), (_individual_list.begin() + _population_size), _population_size, _bracket_size);
+  auto selected_actor_indices = nevil::evolution::tournament_selection(_individual_list.begin(), (_individual_list.begin() + _population_size - 1), _population_size, _bracket_size);
   // Actors and observers split in the middle
   auto selected_observer_indices = nevil::evolution::tournament_selection((_individual_list.begin() + _population_size), _individual_list.end(), _population_size, _bracket_size);
 
@@ -50,8 +52,8 @@ std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::
     if ((*max_observer_individual) < (*_individual_list[i + _population_size]))
       max_observer_individual = _individual_list[i + _population_size];
 
-    new_actor_individuals[i] = _individual_list[selected_actor_indices[i]]->clone();
-    new_observer_individuals[i] = _individual_list[selected_observer_indices[i]]->clone();
+    new_actor_individuals[i] = _individual_list[selected_actor_indices[i]]->clone(true);
+    new_observer_individuals[i] = _individual_list[selected_observer_indices[i] + _population_size]->clone(false);
     new_actor_individuals[i]->mutate(_mutation_rate);
     new_observer_individuals[i]->mutate(_mutation_rate);
   }
@@ -69,7 +71,9 @@ std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::
   _individual_list = std::move(new_actor_individuals);
 
   // Append the new observers to the end
-  std::move(std::begin(_individual_list), std::end(_individual_list), std::back_inserter(new_observer_individuals));
+  for(auto a : new_observer_individuals){
+    _individual_list.push_back(a);
+  }
 
   // Clear out the observers from memory
   new_observer_individuals.clear();

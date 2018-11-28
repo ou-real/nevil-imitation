@@ -57,6 +57,36 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, const nevil::ar
   else
     local_args["mr"] = std::to_string(mutation_rate);
 
+
+  // Actor Observer Neuron Parameter
+  if ((it = cl_args.find("sn")) != cl_args.end())
+    _root["config"]["actorObserverNeuron"] = (it->second == "true");
+  else
+    local_args["sn"] = "false";
+
+  //Speed Parameter
+  if ((it = cl_args.find("speedA")) != cl_args.end())
+    _root["config"]["speedA"] = std::stod(it->second);
+  else
+    local_args["speedA"] = "12";
+
+  if ((it = cl_args.find("speedO")) != cl_args.end())
+    _root["config"]["speedO"] = std::stod(it->second);
+  else
+    local_args["speedO"] = "12";
+
+
+  //Angle Parameter
+  if ((it = cl_args.find("angleA")) != cl_args.end())
+    _root["config"]["angleA"] = std::stod(it->second);
+  else
+    local_args["angleA"] = "0";
+
+  if ((it = cl_args.find("angleO")) != cl_args.end())
+    _root["config"]["angleO"] = std::stod(it->second);
+  else
+    local_args["angleO"] = "0";
+
   // Creating a log file
   // Logging into a text file example
   _trial_logger.start_new_file(local_args["xp_path"], "Trial_" + std::to_string(_trial_id) + ".txt");
@@ -88,7 +118,7 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, const nevil::ar
 
   // Instantiating a controller
   // If you have more than one controller you can use the controller name to instantiate the right one
-  _trial = nevil::test_trial(local_args);
+  _trial = nevil::actor_observer_trial(local_args);
 
   _current_generation = 0;
   _current_individual = 0;
@@ -142,12 +172,14 @@ void nevil::trial_controller::_evaluate()
 {
   _trial.epoch();
   // Text logging
-  _trial_logger << _current_generation << "\t" << _trial.get_best_individual().get_fitness() << std::endl;
+  _trial_logger << _current_generation << "\t" << _trial.get_best_individuals().at(0).get_fitness() << std::endl;
+  _trial_logger << _current_generation << "\t" << _trial.get_best_individuals().at(1).get_fitness() << std::endl;
 
   //JSON logging
   Json::Value data;
   data["generationNumber"] = _current_generation;
-  data["maxFitness"] = _trial.get_best_individual().get_fitness();
+  data["maxFitnessActor"] = _trial.get_best_individuals().at(0).get_fitness();
+  data["maxFitnessObserver"] = _trial.get_best_individuals().at(1).get_fitness();
   _generational_data.append(data);
 }
 
@@ -156,17 +188,24 @@ void nevil::trial_controller::_end()
   printf("-Trial %d: finished\n", _trial_id);
   //Text logging
   _trial_logger << "==Trial Ended==" << std::endl;
-  _trial_logger << "Best chromosome " << _trial.get_best_individual().get_chromosome() << std::endl;
+  _trial_logger << "Best actor chromosome " << _trial.get_best_individuals().at(0).get_chromosome() << std::endl;
+  _trial_logger << "Best observer chromosome " << _trial.get_best_individuals().at(1).get_chromosome() << std::endl;
   _trial_logger.close_file();
 
   //JSON logging
-  Json::Value best_chromosome (Json::arrayValue);
-  auto best_chromosome_vec = _trial.get_best_individual().get_chromosome();
-  for (int i = 0; i < best_chromosome_vec.size(); ++i)
-    best_chromosome.append(best_chromosome_vec[i]);
+  Json::Value best_actor_chromosome (Json::arrayValue);
+  auto best_actor_chromosome_vec = _trial.get_best_individuals().at(0).get_chromosome();
+  for (int i = 0; i < best_actor_chromosome_vec.size(); ++i)
+    best_actor_chromosome.append(best_actor_chromosome_vec[i]);
+
+  Json::Value best_observer_chromosome (Json::arrayValue);
+  auto best_observer_chromosome_vec = _trial.get_best_individuals().at(1).get_chromosome();
+  for (int i = 0; i < best_actor_chromosome_vec.size(); ++i)
+    best_observer_chromosome.append(best_actor_chromosome_vec[i]);
 
   _root["generationalData"] = _generational_data;
-  _root["bestChromosome"] = best_chromosome;
+  _root["bestActorChromosome"] = best_actor_chromosome;
+  _root["bestObserverChromosome"] = best_observer_chromosome;
   _trial_json_logger.write(_root);
   _trial_json_logger.close_file();
 }

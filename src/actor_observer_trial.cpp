@@ -46,7 +46,7 @@ bool nevil::actor_observer_trial::epoch()
   return true;
 }
 
-std::vector<nevil::actor_observer_individual> nevil::actor_observer_trial::get_best_individual() const
+std::vector<nevil::actor_observer_individual> nevil::actor_observer_trial::get_best_individuals() const
 {
   return _best_individuals;
 }

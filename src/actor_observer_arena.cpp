@@ -60,12 +60,18 @@ bool nevil::actor_observer_arena::update()
   // Updating the environment
   for (nevil::robot* r : _robots)
   {
+
+    // If key not found in map iterator to end is returned 
+    if (_objects.find("Switch A") == _objects.end()) 
+        std::cout << "Switch A" << " not found\n\n"; 
+
     // If the robot is at OFF switch
-    if(r->is_at(_objects["switch"], OFF))
+    if(r->is_at_switch())
     {
+      
       // Turn on everything
-      _objects["switch"]->turn_on();
-      _objects["light"]->turn_on();
+      _objects["Switch A"]->turn_on();
+      _objects["Light A"]->turn_on();
     }
   }
 

@@ -30,7 +30,7 @@ namespace nevil
    public:
     robot();
     robot(double x, double y, double angle, const std::string &name
-      , const Enki::Color &color, size_t input_num = 18, double max_speed = 12.8);
+      , const Enki::Color &color, double max_speed = 12.8);
     // robot(const nevil::robot &rhs);
     // robot(nevil::robot &&rhs) noexcept;
 
@@ -42,6 +42,12 @@ namespace nevil
     virtual bool is_at(nevil::object *obj, nevil::object_state state,
      nevil::color_chanel chanel = RED) const;
     std::string get_name() const;
+
+    static const int SENSOR_NUM = 18;
+
+    bool is_at_switch() const;
+    bool is_at_light() const;
+
 
     // nevil::robot &operator=(const nevil::robot &rhs);
     // nevil::robot &operator=(nevil::robot &&rhs) noexcept;
@@ -55,7 +61,7 @@ namespace nevil
     double _initial_angle;
     Enki::Point _initial_position;
     std::string _robot_name;
-    size_t _input_num;
+    //size_t _input_num;
     double _max_speed;
   };
 }

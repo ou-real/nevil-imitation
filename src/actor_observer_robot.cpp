@@ -57,29 +57,11 @@ bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
   }
   
   // Add the bias input
-  inputs[_input_num - 1] = 1;
+  inputs.push_back(1);
   // Evaluate the neural network
   auto output = _neural_network.update(inputs);
   // Pass the output of each NN and convert it to motor velocities
   _set_wheels_speed(output[0], output[1]);
-
-  return true;
-}
-
-bool nevil::actor_observer_robot::is_at_switch() const
-{
-  for (int i = 0; i < 60; ++i)
-    if (camera.image[i].r() != 0.4)
-      return false;
-
-  return true;
-}
-
-bool nevil::actor_observer_robot::is_at_light() const
-{
-  for (int i = 0; i < 60; ++i)
-    if (camera.image[i].r() != 1.0)
-      return false;
 
   return true;
 }
