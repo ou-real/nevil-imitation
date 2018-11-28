@@ -13,7 +13,7 @@ namespace nevil
   {
   public:
     actor_observer_population();
-    actor_observer_population(size_t pop_size, float bracket_ratio, float mutation_rate);
+    actor_observer_population(size_t pop_size, bool actor_observer_neuron, float bracket_ratio, float mutation_rate);
     virtual ~actor_observer_population();
 
     size_t size() const;

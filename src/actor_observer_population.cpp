@@ -2,16 +2,17 @@
 
 nevil::actor_observer_population::actor_observer_population() {}
 
-nevil::actor_observer_population::actor_observer_population(size_t pop_size, float bracket_ratio, float mutation_rate)
+nevil::actor_observer_population::actor_observer_population(size_t pop_size, bool actor_observer_neuron, float bracket_ratio, float mutation_rate)
   : _population_size(pop_size)
   , _bracket_size(size_t(bracket_ratio * pop_size))
   , _mutation_rate(mutation_rate)
 {
+  int genome_size = 38 + 4*actor_observer_neuron;
   _individual_list = std::vector<nevil::actor_observer_individual *>(_population_size * 2);
   for (int i = 0; i < _population_size; ++i){
-    _individual_list[i] = new nevil::actor_observer_individual(38, true);
+    _individual_list[i] = new nevil::actor_observer_individual(genome_size, true);
     _individual_list[i]->set_id(i);
-    _individual_list[i + _population_size] = new nevil::actor_observer_individual(38, false);
+    _individual_list[i + _population_size] = new nevil::actor_observer_individual(genome_size, false);
     _individual_list[i + _population_size]->set_id(i + _population_size);
   }
 }

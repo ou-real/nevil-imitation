@@ -18,7 +18,7 @@ nevil::actor_observer_trial::actor_observer_trial(const nevil::args &cl_args)
   double angle_O = std::stod(local_args["speedO"]);
 
   _arena = new nevil::actor_observer_arena(WORLD_SIZE_X, WORLD_SIZE_Y, actor_observer_neuron, speed_A, speed_O, angle_A, angle_O);
-  _population = nevil::actor_observer_population(_population_size, bracket_ratio, mutation_rate);
+  _population = nevil::actor_observer_population(_population_size, actor_observer_neuron, bracket_ratio, mutation_rate);
   _current_index = 0;
 }
 
