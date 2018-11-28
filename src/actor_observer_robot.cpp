@@ -22,19 +22,9 @@ void nevil::actor_observer_robot::set_individual(nevil::individual *i)
   _neural_network.set_weights(_individual->get_chromosome());
 }
 
-bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
-{
+std::vector<double> nevil::actor_observer_robot::get_inputs(const nevil::object_list &objects){
   // Get the sensor information
   std::vector<double> inputs = _get_camera_inputs(objects);
-
-  if (is_at_switch()){
-
-  }
-
-  if (is_at_light())
-  {
-    _individual->increase_fitness(1);
-  }
 
   // If it is an actor
   if(_individual->is_actor())
@@ -55,11 +45,30 @@ bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
       inputs.push_back(1);
     }
   }
-  
+
   // Add the bias input
   inputs.push_back(1);
+
+  return inputs;
+}
+
+bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
+{
+  // Get the sensor information
+  std::vector<double> inputs = get_inputs(objects);
+
+  if (is_at_switch()){
+
+  }
+
+  if (is_at_light())
+  {
+    _individual->increase_fitness(1);
+  }
+
   // Evaluate the neural network
   auto output = _neural_network.update(inputs);
+
   // Pass the output of each NN and convert it to motor velocities
   _set_wheels_speed(output[0], output[1]);
 

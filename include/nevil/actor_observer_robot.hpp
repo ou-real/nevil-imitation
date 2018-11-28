@@ -16,6 +16,7 @@ namespace nevil
       , const std::string &robot_name, const Enki::Color &color); // actor_observer_neuron is true if using 'unique neurons'
 
     nevil::robot *clone() const;
+    std::vector<double> get_inputs(const nevil::object_list &objects); // Gets camera inputs, includes indivudual neuron inputs if enabled.
     bool update(const nevil::object_list &objects);
     void set_individual(nevil::individual *i);
 
