@@ -4,6 +4,7 @@
 
 #include "nevil/arena/robot.hpp"
 #include "nevil/robot_controller/basic_feedforward_nn.hpp"
+#include "nevil/robot_controller/delta_rule_nn.hpp"
 #include "nevil/actor_observer_individual.hpp"
 
 namespace nevil

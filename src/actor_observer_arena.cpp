@@ -93,10 +93,10 @@ bool nevil::actor_observer_arena::update()
   }
 
   for (nevil::robot* r : _robots){
-    if(r->get_name() == "Actor"){
+    //if(r->get_name() == "Actor"){
       
       r->update(_objects);
-    }
+    //}
   }
 
   return true;

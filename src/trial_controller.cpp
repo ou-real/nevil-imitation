@@ -80,7 +80,7 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, const nevil::ar
   if ((it = cl_args.find("angleA")) != cl_args.end())
     _root["config"]["angleA"] = std::stod(it->second);
   else
-    local_args["angleA"] = "3";
+    local_args["angleA"] = "0";
 
   if ((it = cl_args.find("angleO")) != cl_args.end())
     _root["config"]["angleO"] = std::stod(it->second);

@@ -4,7 +4,7 @@ nevil::actor_observer_robot::actor_observer_robot(double x, double y, double ang
       , const std::string &robot_name, const Enki::Color &color)
   : robot(x, y, angle, robot_name, color, max_speed)
   , _actor_observer_neuron(actor_observer_neuron)
-  , _neural_network(new nevil::basic_feedforward_nn(_actor_observer_neuron ? 21 : 19, 2))
+  , _neural_network(robot_name == "Actor" ? static_cast<nevil::basic_nn*>(new nevil::basic_feedforward_nn(_actor_observer_neuron ? 21 : 19, 2)) : static_cast<nevil::basic_nn*>(new nevil::delta_rule_nn(_actor_observer_neuron ? 21 : 19, 2)))
 {}
 
 nevil::robot *nevil::actor_observer_robot::clone() const
@@ -50,7 +50,7 @@ std::vector<double> nevil::actor_observer_robot::get_inputs(const nevil::object_
 }
 
 std::vector<double> nevil::actor_observer_robot::get_outputs(const std::vector<double> inputs){
-  std::vector<double> outputs = _neural_network->update(inputs);
+  std::vector<double> outputs = _neural_network->get_outputs(inputs);
   return(outputs);
 }
 
@@ -58,27 +58,32 @@ std::vector<double> nevil::actor_observer_robot::get_outputs(const std::vector<d
 
 bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
 {
+
+  
+
+
   if(get_name() == "Actor"){
     // Get the sensor information
     std::vector<double> inputs = get_inputs(objects);
 
     if (is_at_switch()){
-
+      // Fitness for turning on the switch for the first time
+      _individual->increase_fitness(1);
     }
 
     if (is_at_light())
     {
+      // Fitness for being at the ON light
       _individual->increase_fitness(1);
     }
 
     // Evaluate the neural network
     auto output = _neural_network->update(inputs);
-
+    
     // Pass the output of each NN and convert it to motor velocities
     _set_wheels_speed(output[0], output[1]);
-
   }else{
-
+    //_set_wheels_speed(output[0], output[1]);
   }
   
   return true;

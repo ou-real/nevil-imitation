@@ -31,3 +31,16 @@ std::vector<double> nevil::basic_feedforward_nn::update(const std::vector<double
   // Basic feed forward does not alter the weights, just return the outputs
   return get_outputs(inputs);
 }
+
+double nevil::basic_feedforward_nn::activation_function(double x)
+{
+  return(1 / (1 + exp(-x)));
+}
+
+double nevil::basic_feedforward_nn::activation_function_derivative(double x)
+{
+  double fvalue = activation_function(x);
+
+  // This only holds for an activation function of (1 / (1 + exp(-x)))
+  return(fvalue * (1 - fvalue));
+}
