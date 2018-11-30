@@ -15,11 +15,6 @@ nevil::basic_feedforward_nn::basic_feedforward_nn(std::size_t input_num, std::si
 
 std::vector<double> nevil::basic_feedforward_nn::get_outputs(const std::vector<double> &inputs)
 {
-  return update(inputs);
-}
-
-std::vector<double> nevil::basic_feedforward_nn::update(const std::vector<double> &inputs, const std::vector<double> &expect_outputs)
-{
   assert ((_num_input_nodes == inputs.size())
     && "Error: matrix size and input size don't match!");
 
@@ -28,4 +23,11 @@ std::vector<double> nevil::basic_feedforward_nn::update(const std::vector<double
     for (std::size_t j = 0; j < _num_input_nodes; ++j)
         outputs[i] += _weights[(i * _num_input_nodes) + j] * inputs[j];
   return outputs;
+  
+}
+
+std::vector<double> nevil::basic_feedforward_nn::update(const std::vector<double> &inputs, const std::vector<double> &expect_outputs)
+{
+  // Basic feed forward does not alter the weights, just return the outputs
+  return get_outputs(inputs);
 }
