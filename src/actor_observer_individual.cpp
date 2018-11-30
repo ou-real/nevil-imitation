@@ -40,7 +40,6 @@ nevil::actor_observer_individual::~actor_observer_individual(){}
 nevil::actor_observer_individual *nevil::actor_observer_individual::clone(bool is_actor) const
 {
   nevil::actor_observer_individual* new_individual = new actor_observer_individual(_chromosome, is_actor);
-  new_individual->_uuid = _uuid;
   return new_individual;
 }
 

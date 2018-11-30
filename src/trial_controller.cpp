@@ -80,12 +80,12 @@ nevil::trial_controller::trial_controller(int id, unsigned seed, const nevil::ar
   if ((it = cl_args.find("angleA")) != cl_args.end())
     _root["config"]["angleA"] = std::stod(it->second);
   else
-    local_args["angleA"] = "0";
+    local_args["angleA"] = "3";
 
   if ((it = cl_args.find("angleO")) != cl_args.end())
     _root["config"]["angleO"] = std::stod(it->second);
   else
-    local_args["angleO"] = "0";
+    local_args["angleO"] = "3";
 
   // Creating a log file
   // Logging into a text file example

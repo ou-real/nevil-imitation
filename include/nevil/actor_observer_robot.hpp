@@ -11,12 +11,12 @@ namespace nevil
   class actor_observer_robot : public robot
   {
   public:
-    actor_observer_robot();
     actor_observer_robot(double x, double y, double angle, bool actor_observer_neuron, double max_speed
       , const std::string &robot_name, const Enki::Color &color); // actor_observer_neuron is true if using 'unique neurons'
 
     nevil::robot *clone() const;
     std::vector<double> get_inputs(const nevil::object_list &objects); // Gets camera inputs, includes indivudual neuron inputs if enabled.
+    std::vector<double> get_outputs(const std::vector<double>);
     bool update(const nevil::object_list &objects);
     void set_individual(nevil::individual *i);
 
@@ -26,7 +26,7 @@ namespace nevil
   protected:
     bool _actor_observer_neuron; // actor_observer_neuron is true if using 'unique neurons'
     nevil::actor_observer_individual *_individual;
-    nevil::basic_feedforward_nn _neural_network;
+    nevil::basic_nn *_neural_network;
   };
 }
 

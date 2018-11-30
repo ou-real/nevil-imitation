@@ -27,7 +27,7 @@ nevil::actor_observer_arena::actor_observer_arena(int size_x, int size_y, bool a
 
   // Create a robot named Actor
   _add_robot(new nevil::actor_observer_robot(size_x / 2.0
-    , size_y *  (2/5.0)
+    , size_y / 2.0
     , angle_actor
     , actor_observer_neuron
     , speed_actor
@@ -35,13 +35,13 @@ nevil::actor_observer_arena::actor_observer_arena(int size_x, int size_y, bool a
     , Enki::Color(0.5, 0.0, 0.0)));
 
   // Create a robot named Observer
-  _add_robot(new nevil::actor_observer_robot(size_x / 2.0
+  _add_robot(new nevil::actor_observer_robot(size_x
     , size_y *  (4/5.0)
     , angle_observer
     , actor_observer_neuron
     , speed_observer
     , "Observer"
-    , Enki::Color(0.5, 0.0, 0.0)));
+    , Enki::Color(0.0, 0.6, 0.0)));
 }
 
 nevil::actor_observer_arena::~actor_observer_arena(){}
@@ -76,8 +76,28 @@ bool nevil::actor_observer_arena::update()
   }
 
   // Updating the robots
-  for (nevil::robot* r : _robots)
-    r->update(_objects);
+  // Assumes n-actors, then n-observers
+  int num_robots = _robots.size();
+  assert(num_robots % 2 == 0 && "The number of robots must be even (1 observer per actor)");
+
+  for(int i = 0; i < num_robots / 2; ++i){
+    actor_observer_robot* actor_robot = static_cast<actor_observer_robot*>(_robots[i]);
+    actor_observer_robot* observer_robot = static_cast<actor_observer_robot*>(_robots[i+num_robots/2]);
+
+
+    std::vector<double> actor_inputs = actor_robot->get_inputs(_objects);
+    std::vector<double> actor_outputs = actor_robot->get_outputs(actor_inputs);
+
+    // Pass the actors view into the observer
+    std::vector<double> observer_outputs = observer_robot->get_outputs(actor_inputs);
+  }
+
+  for (nevil::robot* r : _robots){
+    if(r->get_name() == "Actor"){
+      
+      r->update(_objects);
+    }
+  }
 
   return true;
 }

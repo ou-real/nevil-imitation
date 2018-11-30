@@ -30,12 +30,8 @@ size_t nevil::actor_observer_population::size() const
 
 std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::next_generation()
 {
-  std::cout << "Begin + pouplation_size - 1: " << (*(_individual_list.begin() + _population_size - 1))->get_uuid() << std::endl;
-  std::cout << "Begin + pouplation_size: " << (*(_individual_list.begin() + _population_size))->get_uuid() << std::endl;
-  // Selecting (Select actors and observers only from their pool)
+  // Selecting (Select actors NOT observers)
   auto selected_actor_indices = nevil::evolution::tournament_selection(_individual_list.begin(), (_individual_list.begin() + _population_size - 1), _population_size, _bracket_size);
-  // Actors and observers split in the middle
-  auto selected_observer_indices = nevil::evolution::tournament_selection((_individual_list.begin() + _population_size), _individual_list.end(), _population_size, _bracket_size);
 
   // List to store the new individuals
   std::vector<nevil::actor_observer_individual *> new_actor_individuals(_population_size);
@@ -54,9 +50,14 @@ std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::
       max_observer_individual = _individual_list[i + _population_size];
 
     new_actor_individuals[i] = _individual_list[selected_actor_indices[i]]->clone(true);
-    new_observer_individuals[i] = _individual_list[selected_observer_indices[i] + _population_size]->clone(false);
+    new_actor_individuals[i]->set_id(i);
+
+    // Copy the existing observers as is (trained through delta rule).
+    new_observer_individuals[i] = _individual_list[i + _population_size]->clone(false);
+    new_actor_individuals[i]->set_id(i);
+
+    // Mutate only the actors
     new_actor_individuals[i]->mutate(_mutation_rate);
-    new_observer_individuals[i]->mutate(_mutation_rate);
   }
 
   // Store the best individuals
