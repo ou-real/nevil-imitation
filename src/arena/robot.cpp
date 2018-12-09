@@ -100,8 +100,19 @@ double nevil::robot::_clamp(double val, double min, double max)
 
 void nevil::robot::_set_wheels_speed(double left, double right)
 {
+  left = _range_to_max_speed(left, 0.0, 1.0);
+  right = _range_to_max_speed(right, 0.0, 1.0);
   leftSpeed = _clamp(left, -1 * _max_speed, _max_speed);
   rightSpeed = _clamp(right, -1 * _max_speed, _max_speed);
+}
+
+double nevil::robot::_range_to_max_speed(double value, double old_min, double old_max)
+{
+  double new_min = -_max_speed;
+  double new_max = _max_speed;
+  double old_range = old_max - old_min;
+  double new_range = new_max - (new_min);
+  return ((( value - old_min ) * new_range) / old_range ) + new_min;
 }
 
 bool nevil::robot::is_at(nevil::object *obj, object_state state, nevil::color_chanel chanel) const

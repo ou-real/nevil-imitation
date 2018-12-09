@@ -58,10 +58,6 @@ std::vector<double> nevil::actor_observer_robot::get_outputs(const std::vector<d
 
 bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
 {
-
-  
-
-
   if(get_name() == "Actor"){
     // Get the sensor information
     std::vector<double> inputs = get_inputs(objects);
@@ -79,11 +75,56 @@ bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
 
     // Evaluate the neural network
     auto output = _neural_network->update(inputs);
+
+
+    // Map the [0.0, 1.0] range to the [min_speed, max_speed]
+    output[0] = _range_to_max_speed(output[0], 0.0, 1.0);
+    output[1] = _range_to_max_speed(output[1], 0.0, 1.0);
     
     // Pass the output of each NN and convert it to motor velocities
     _set_wheels_speed(output[0], output[1]);
   }else{
-    //_set_wheels_speed(output[0], output[1]);
+    std::cout << "Called update(1 arg) with observer robot, should be actor. ID: " << _individual->get_uuid() << std::endl;
+  }
+
+  return true;
+}
+
+bool nevil::actor_observer_robot::update(const nevil::object_list &objects, std::vector<double> actor_input, std::vector<double> actor_output)
+{
+  if(get_name() == "Observer"){
+
+    // These don't effect the robot, they are only meant to measure performance
+    if (is_at_switch()){
+      // Fitness for turning on the switch for the first time
+      _individual->increase_fitness(1);
+    }
+
+    if (is_at_light())
+    {
+      // Fitness for being at the ON light
+      _individual->increase_fitness(1);
+    }
+
+    // Evaluate the neural network
+    _neural_network->update(actor_input, actor_output);
+
+    std::vector<double> output = _neural_network->get_outputs(get_inputs(objects));
+
+    // Update the chromosome of the individual controlling this robot to make the changes persistent.
+    _individual->set_chromosome(_neural_network->get_weights());
+
+    // Map the [0.0, 1.0] range to the [min_speed, max_speed]
+    output[0] = _range_to_max_speed(output[0], 0.0, 1.0);
+    output[1] = _range_to_max_speed(output[1], 0.0, 1.0);
+    
+    // Move the observer
+    _set_wheels_speed(output[0], output[1]);
+    
+    // Pass the output of each NN and convert it to motor velocities
+    _set_wheels_speed(output[0], output[1]);
+  }else{
+    std::cout << "Called update(3 arg) with actor robot, should be observer. ID: " << _individual->get_uuid() << std::endl;
   }
   
   return true;

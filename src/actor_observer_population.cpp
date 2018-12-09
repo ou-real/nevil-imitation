@@ -74,6 +74,11 @@ std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::
 
   // Append the new observers to the end
   for(auto a : new_observer_individuals){
+    std::cout << "Observer Chromosome: ";
+    for(auto i : a->get_chromosome()){
+      std::cout << i << ", ";
+    }
+    std::cout << std::endl;
     _individual_list.push_back(a);
   }
 

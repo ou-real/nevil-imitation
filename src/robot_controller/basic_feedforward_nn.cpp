@@ -13,6 +13,9 @@ nevil::basic_feedforward_nn::basic_feedforward_nn(std::size_t input_num, std::si
 }
 
 
+/**
+ * Outputs are restricted to 0.0 to 1.0
+ */
 std::vector<double> nevil::basic_feedforward_nn::get_outputs(const std::vector<double> &inputs)
 {
   assert ((_num_input_nodes == inputs.size())
@@ -20,10 +23,16 @@ std::vector<double> nevil::basic_feedforward_nn::get_outputs(const std::vector<d
 
   std::vector<double> outputs(_num_output_nodes, 0);
   for (std::size_t i = 0; i < _num_output_nodes; ++i)
+  {
+    double weighted_sum = 0;
     for (std::size_t j = 0; j < _num_input_nodes; ++j)
-        outputs[i] += _weights[(i * _num_input_nodes) + j] * inputs[j];
+    {
+      weighted_sum += _weights[(i * _num_input_nodes) + j] * inputs[j];
+    }
+    outputs[i] = activation_function(weighted_sum);
+  }
+
   return outputs;
-  
 }
 
 std::vector<double> nevil::basic_feedforward_nn::update(const std::vector<double> &inputs, const std::vector<double> &expect_outputs)

@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <vector>
 #include <math.h>       /* exp */
+#include <iostream>
 
 namespace nevil
 {
@@ -16,6 +17,7 @@ namespace nevil
       , const std::vector<double> &weights);
 
     void set_weights(const std::vector<double> &weights);
+    std::vector<double> get_weights();
     virtual std::vector<double> get_outputs(const std::vector<double> &inputs) = 0; // Map results to the range (-12.8, 12.8)
     virtual std::vector<double> update(const std::vector<double> &inputs, const std::vector<double> &expected_output = std::vector<double>()) = 0;
     virtual double activation_function(double x) = 0;  // Should be bound by 0.0 to 1.0

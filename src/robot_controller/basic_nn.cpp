@@ -17,6 +17,10 @@ nevil::basic_nn::basic_nn(std::size_t input_num, std::size_t num_output_nodes
   && "Error: matrix size and weight size don't match!");
 }
 
+std::vector<double> nevil::basic_nn::get_weights(){
+  return _weights;
+}
+
 void nevil::basic_nn::set_weights(const std::vector<double> &weights)
 {
   assert ((_num_input_nodes * _num_output_nodes) == weights.size()

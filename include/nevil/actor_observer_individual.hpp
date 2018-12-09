@@ -32,6 +32,7 @@ namespace nevil
     // Setters
     void set_id(int id); // Sets the id of this individual
     void mutate(float rate); // Possibly mutates a single randomly-selected gene to a random value
+    void set_chromosome(std::vector<double> chromosome);
 
     // Mandatory virtual functions
     nevil::actor_observer_individual* clone() const;

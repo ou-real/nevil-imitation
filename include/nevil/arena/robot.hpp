@@ -54,6 +54,8 @@ namespace nevil
 
    protected:
     void _set_wheels_speed(double left, double right);
+    double _range_to_max_speed(double value,
+     double min_range_output, double max_range_output);
     double _clamp(double val, double min, double max);
     virtual std::vector<double> _get_camera_inputs(const nevil::object_list &objects,
      color_chanel chanel = RED) const;

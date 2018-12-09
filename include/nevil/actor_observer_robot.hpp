@@ -19,6 +19,7 @@ namespace nevil
     std::vector<double> get_inputs(const nevil::object_list &objects); // Gets camera inputs, includes indivudual neuron inputs if enabled.
     std::vector<double> get_outputs(const std::vector<double>);
     bool update(const nevil::object_list &objects);
+    bool update(const nevil::object_list &objects, std::vector<double> actor_input, std::vector<double> actor_output);
     void set_individual(nevil::individual *i);
 
     // nevil::actor_observer_robot &operator=(const nevil::actor_observer_robot &rhs);

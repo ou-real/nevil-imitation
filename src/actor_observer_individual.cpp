@@ -83,6 +83,10 @@ void nevil::actor_observer_individual::mutate(float rate)
   }
 }
 
+void nevil::actor_observer_individual::set_chromosome(std::vector<double> chromosome){
+  _chromosome = chromosome;
+}
+
 // Mandatory virtual functions
 nevil::actor_observer_individual *nevil::actor_observer_individual::clone() const
 {

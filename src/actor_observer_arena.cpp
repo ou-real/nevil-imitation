@@ -79,25 +79,26 @@ bool nevil::actor_observer_arena::update()
   // Assumes n-actors, then n-observers
   int num_robots = _robots.size();
   assert(num_robots % 2 == 0 && "The number of robots must be even (1 observer per actor)");
+  std::vector<std::vector<double>> observer_outputs(); 
 
   for(int i = 0; i < num_robots / 2; ++i){
     actor_observer_robot* actor_robot = static_cast<actor_observer_robot*>(_robots[i]);
     actor_observer_robot* observer_robot = static_cast<actor_observer_robot*>(_robots[i+num_robots/2]);
 
 
-    std::vector<double> actor_inputs = actor_robot->get_inputs(_objects);
-    std::vector<double> actor_outputs = actor_robot->get_outputs(actor_inputs);
+    std::vector<double> actor_input = actor_robot->get_inputs(_objects);
+    std::vector<double> actor_output = actor_robot->get_outputs(actor_input);
+    actor_robot->update(_objects);
 
-    // Pass the actors view into the observer
-    std::vector<double> observer_outputs = observer_robot->get_outputs(actor_inputs);
+    // Pass the actors input / output into the observer's update
+    observer_robot->update(_objects, actor_input, actor_output);
   }
 
-  for (nevil::robot* r : _robots){
-    //if(r->get_name() == "Actor"){
-      
-      r->update(_objects);
-    //}
-  }
+  // for (nevil::robot* r : _robots){
+  //   if(r->get_name() == "Actor"){
+  //     r->update(_objects);
+  //   }
+  // }
 
   return true;
 }
