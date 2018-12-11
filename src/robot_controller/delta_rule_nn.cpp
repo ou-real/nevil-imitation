@@ -41,7 +41,7 @@ std::vector<double> nevil::delta_rule_nn::update(const std::vector<double> &pred
   // Calculate the error for each output
   std::vector<double> e;
   for(int i = 0; i < _num_output_nodes; ++i){
-    e.push_back( pow((outputs[i] - expect_outputs[i]), 2));
+    e.push_back(outputs[i] - expect_outputs[i]);
   }
   
   // Calculate a at each output (weighted sum input to node)

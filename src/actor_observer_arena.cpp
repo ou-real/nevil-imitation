@@ -89,11 +89,11 @@ bool nevil::actor_observer_arena::update()
     std::vector<double> actor_input = actor_robot->get_inputs(_objects);
     std::vector<double> actor_output = actor_robot->get_outputs(actor_input);
     actor_robot->update(_objects);
-    actor_robot->update_tick(_objects);
+    actor_robot->update_tick();
 
     // Pass the actors input / output into the observer's update
     observer_robot->update(_objects, actor_input, actor_output);
-    observer_robot->update_tick(_objects);
+    observer_robot->update_tick();
   }
 
   return true;
