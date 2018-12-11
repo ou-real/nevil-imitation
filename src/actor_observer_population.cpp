@@ -74,19 +74,19 @@ std::vector<nevil::actor_observer_individual> nevil::actor_observer_population::
 
   // Append the new observers to the end
   for(auto a : new_observer_individuals){
-    std::cout << "Observer Chromosome: ";
-    for(auto i : a->get_chromosome()){
-      std::cout << i << ", ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Observer Chromosome: ";
+    // for(auto i : a->get_chromosome()){
+    //   std::cout << i << ", ";
+    // }
+    // std::cout << std::endl;
     _individual_list.push_back(a);
   }
 
   // Clear out the observers from memory
   new_observer_individuals.clear();
 
-  std::cout << "Population Size: " << _population_size << std::endl;
-  std::cout << "New individual list size: " << _individual_list.size() << std::endl;
+  // std::cout << "Population Size: " << _population_size << std::endl;
+  // std::cout << "New individual list size: " << _individual_list.size() << std::endl;
   
   return best_individuals;
 }

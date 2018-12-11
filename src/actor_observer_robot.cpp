@@ -5,6 +5,7 @@ nevil::actor_observer_robot::actor_observer_robot(double x, double y, double ang
   : robot(x, y, angle, robot_name, color, max_speed)
   , _actor_observer_neuron(actor_observer_neuron)
   , _neural_network(robot_name == "Actor" ? static_cast<nevil::basic_nn*>(new nevil::basic_feedforward_nn(_actor_observer_neuron ? 21 : 19, 2)) : static_cast<nevil::basic_nn*>(new nevil::delta_rule_nn(_actor_observer_neuron ? 21 : 19, 2)))
+  , _tick(0)
 {}
 
 nevil::robot *nevil::actor_observer_robot::clone() const
@@ -54,6 +55,13 @@ std::vector<double> nevil::actor_observer_robot::get_outputs(const std::vector<d
   return(outputs);
 }
 
+void nevil::actor_observer_robot::reset_tick(){
+  _tick = 0;
+}
+
+void nevil::actor_observer_robot::update_tick(){
+  ++_tick;
+}
 
 
 bool nevil::actor_observer_robot::update(const nevil::object_list &objects)
@@ -109,17 +117,14 @@ bool nevil::actor_observer_robot::update(const nevil::object_list &objects, std:
     // Evaluate the neural network
     _neural_network->update(actor_input, actor_output);
 
-    std::vector<double> output = _neural_network->get_outputs(get_inputs(objects));
-
     // Update the chromosome of the individual controlling this robot to make the changes persistent.
     _individual->set_chromosome(_neural_network->get_weights());
 
+    std::vector<double> output = _neural_network->get_outputs(get_inputs(objects));
+    
     // Map the [0.0, 1.0] range to the [min_speed, max_speed]
     output[0] = _range_to_max_speed(output[0], 0.0, 1.0);
     output[1] = _range_to_max_speed(output[1], 0.0, 1.0);
-    
-    // Move the observer
-    _set_wheels_speed(output[0], output[1]);
     
     // Pass the output of each NN and convert it to motor velocities
     _set_wheels_speed(output[0], output[1]);

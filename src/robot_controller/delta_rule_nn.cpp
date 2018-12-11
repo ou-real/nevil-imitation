@@ -53,7 +53,7 @@ std::vector<double> nevil::delta_rule_nn::update(const std::vector<double> &pred
     {
         weighted_sum += _weights[(i * _num_input_nodes) + j] * prediction_input[j];
     }
-    a.push_back(activation_function(weighted_sum));
+    a.push_back(weighted_sum);
   }
 
   // Calculate the f' of for each a
@@ -75,9 +75,11 @@ std::vector<double> nevil::delta_rule_nn::update(const std::vector<double> &pred
   {
     for (std::size_t j = 0; j < _num_input_nodes; ++j)
     {
-      _weights[(i * _num_input_nodes) + j] += -LEARNING_RATE * delta[i] * prediction_input[j];
+      _weights[(i * _num_input_nodes) + j] += -1 * LEARNING_RATE * delta[i] * prediction_input[j];
     }
   }
+
+  
 
   return std::vector<double>();
 }
