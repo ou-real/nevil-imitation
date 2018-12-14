@@ -49,3 +49,7 @@ CMakeCache.txt
 ehthumbs.db
 Thumbs.db
 *.orig
+
+## Visual Studio Code configuration files
+.vscode/
+compile_commands.json

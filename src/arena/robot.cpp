@@ -5,16 +5,15 @@ nevil::robot::robot()
 {}
 
 nevil::robot::robot(double x, double y, double angle
-    , const std::string &name, const Enki::Color &color, size_t input_num, double max_speed)
+    , const std::string &name, const Enki::Color &color, double max_speed)
   : Enki::EPuck(EPuck::CAPABILITY_CAMERA)
   , _initial_angle(angle * M_PI)
   , _initial_position(Enki::Point(x, y))
   , _robot_name(name)
-  , _input_num(input_num)
   , _max_speed(max_speed)
 {
   assert((max_speed <= 12.8) && "Warning the max speed of Epuck is 12.8.");
-  assert((input_num >= 18) && "The minimum number of inputs should be 18");
+  //assert((input_num >= 18) && "The minimum number of inputs should be 18");
   setColor(color);
   reset_position();
 }
@@ -56,7 +55,7 @@ std::vector<double> nevil::robot::_get_camera_inputs(const nevil::object_list &o
   nevil::color_chanel chanel) const
 {
   // Reset the counters
-  std::vector<double> sensor_counter(_input_num, 0);
+  std::vector<double> sensor_counter(SENSOR_NUM, 0);
 
   // Each color has 6 groups of pixels
   for (short i = 0; i < 6; ++i)
@@ -78,7 +77,7 @@ std::vector<double> nevil::robot::_get_camera_inputs(const nevil::object_list &o
   }
 
   // Adjust the sensor information
-  for (size_t i = 0; i < _input_num; ++i)
+  for (size_t i = 0; i < SENSOR_NUM; ++i)
     sensor_counter[i] = sensor_counter[i] > 7;
 
   return sensor_counter;
@@ -101,8 +100,19 @@ double nevil::robot::_clamp(double val, double min, double max)
 
 void nevil::robot::_set_wheels_speed(double left, double right)
 {
+  left = _range_to_max_speed(left, 0.0, 1.0);
+  right = _range_to_max_speed(right, 0.0, 1.0);
   leftSpeed = _clamp(left, -1 * _max_speed, _max_speed);
   rightSpeed = _clamp(right, -1 * _max_speed, _max_speed);
+}
+
+double nevil::robot::_range_to_max_speed(double value, double old_min, double old_max)
+{
+  double new_min = -_max_speed;
+  double new_max = _max_speed;
+  double old_range = old_max - old_min;
+  double new_range = new_max - (new_min);
+  return ((( value - old_min ) * new_range) / old_range ) + new_min;
 }
 
 bool nevil::robot::is_at(nevil::object *obj, object_state state, nevil::color_chanel chanel) const
@@ -117,6 +127,24 @@ bool nevil::robot::is_at(nevil::object *obj, object_state state, nevil::color_ch
 
   for (short i = 0; i < 60; ++i)
     if (camera.image[i][chanel] != color_val)
+      return false;
+
+  return true;
+}
+
+bool nevil::robot::is_at_switch() const
+{
+  for (int i = 0; i < 60; ++i)
+    if (camera.image[i].r() != 0.4)
+      return false;
+
+  return true;
+}
+
+bool nevil::robot::is_at_light() const
+{
+  for (int i = 0; i < 60; ++i)
+    if (camera.image[i].r() != 1.0)
       return false;
 
   return true;
